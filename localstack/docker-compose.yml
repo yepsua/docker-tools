@@ -1,0 +1,28 @@
+services:
+  yepsua-localstack:
+    container_name: yepsua-localstack
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    environment:
+      - DEBUG=1
+      - LOCALSTACK_PERSISTENCE=1
+      - SERVICES=s3
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    volumes:
+      - yepsua-localstack:/var/lib/localstack
+      - ./init-s3.sh:/etc/localstack/init/ready.d/init-s3.sh
+    networks:
+      - sail
+
+networks:
+  sail:
+    external: true
+    name: yepsua-network
+
+volumes:
+  yepsua-localstack:
+    name: yepsua-localstack
